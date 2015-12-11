@@ -157,17 +157,9 @@ def cost_function(WR, WU, WT, P, Q, X, mu_user, mu_item, eta):
     loss = loss_function(WR, WU, WT, P, Q, X, mu_user, mu_item)
 
     # Regularization error
-    reg_P = 0
-    for Pu in P:
-        reg_P += Pu.dot(Pu)
-
-    reg_Q = 0
-    for Qi in Q:
-        reg_Q += Qi.dot(Qi)
-
-    reg_X = 0
-    for Xt in X:
-        reg_X += Xt.dot(Xt)
+    reg_P = (P ** 2).sum()
+    reg_Q = (Q ** 2).sum()
+    reg_X = (X ** 2).sum()
 
     return loss + eta * (reg_P + reg_Q + reg_X)
 

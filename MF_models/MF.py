@@ -58,27 +58,6 @@ def get_data(collection, dataset, num_folds, alpha):
     return data
 
 
-# Objective function
-def cost_function(C, X, Y, eta):
-    # C: data arrays in sparse format
-    # X, Y: factor matrices
-    # eta: regularization term
-
-    # Reconstruction error
-    loss = loss_function(C, X, Y)
-
-    # Regularization error
-    reg_x = 0
-    for Xu in X:
-        reg_x += Xu.dot(Xu)
-
-    reg_y = 0
-    for Yi in Y:
-        reg_y += Yi.dot(Yi)
-
-    return loss + eta * (reg_x + reg_y)
-
-
 # RMSE function
 def loss_function(C, X, Y):
     # C: data arrays stored in sparse format
@@ -94,6 +73,22 @@ def loss_function(C, X, Y):
         loss += np.sum(Cu_dense * ((Pu_dense - Zu) ** 2))
 
     return loss
+
+
+# Objective function
+def cost_function(C, X, Y, eta):
+    # C: data arrays in sparse format
+    # X, Y: factor matrices
+    # eta: regularization term
+
+    # Reconstruction error
+    loss = loss_function(C, X, Y)
+
+    # Regularization error
+    reg_x = (X ** 2).sum()
+    reg_y = (Y ** 2).sum()
+
+    return loss + eta * (reg_x + reg_y)
 
 
 # Train and test a given fold (convenient for parallel cross-validation)
